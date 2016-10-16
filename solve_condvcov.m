@@ -1,6 +1,6 @@
 function [PP] = solve_condvcov(A,B,C1,C2,D,n_shk,n_Y,kbar,n_hist,jlag)
 
-%% Pre-Allocate %%
+% pre-allocate matrices
 AA  = zeros([kbar+1+n_shk,kbar+1+n_shk,n_hist]);
 BB  = zeros([kbar+1+n_shk,n_shk+1,n_hist]);
 CC1 = zeros([n_Y,kbar+1+n_shk,n_hist]);
@@ -27,7 +27,7 @@ PP_old  = PP;
 count   = 1;
 dif     = inf;
 
-%% Kalman Filter %%
+% kalman filter
 while dif>1e-9 && count<10000
     for j=1:n_hist
         PP(:,:,j)    = AA(:,:,j)*pp(:,:,jlag(j)+1)*AA(:,:,j)'+BB(:,:,j)*BB(:,:,j)';

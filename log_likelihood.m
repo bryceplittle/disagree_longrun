@@ -29,9 +29,6 @@ LL      = 0;
 X_hat   = zeros(kbar+1,T+1);
 Z       = [Y1, Y2];
 
-% Z       = [Y1];
-% not0    = not0*0;
-
 try
     for tt = 1:T
         
@@ -45,7 +42,7 @@ try
 			P0  = reshape((eye((kbar+1)^2)-kron(A(:,:,2^tau),A(:,:,2^tau)))*BB(:),kbar+1,kbar+1);
 		end
         
-        % Construct mu_Z(s^tt), Q1(s^tt), Q2(s^tt), B_tilde(s^tt) %
+        % construct mu_Z(s^tt), Q1(s^tt), Q2(s^tt), B_tilde(s^tt) %
         mu_Z    = [mu_c; mu_d; kap_0m+kap_1m*g0_pd(jj)-g0_pd(jj_lag)+mu_d; g0_rf(jj); ones(not0(tt),1)*mu_c];
         
         % Q1, Q2 for dC_{t+1|t} %
@@ -55,7 +52,7 @@ try
         R       = [D(2:end,1:end-1,jj), zeros(n_Y-1,not0(tt)); zeros(not0(tt),n_shk), sqrt(e_1'*H*Pi(:,:,jj_lag)*H'*e_1)*eye(not0(tt))];
         B_tilde = [B(:,:,jj), zeros(kbar+1,not0(tt))];
         
-        % Kalman Filter %
+        % kalman filter
         Z_tilde     = Z(tt,1:4+not0(tt))'-mu_Z-(Q1*A(:,:,jj)+Q2)*X_hat(:,tt);
         Omega       = (Q1*A(:,:,jj)+Q2)*P0*(Q1*A(:,:,jj)+Q2)'+(Q1*B_tilde+R)*(Q1*B_tilde+R)';
 		Omega_inv   = eye(size(Z_tilde,1))/Omega;
@@ -64,7 +61,7 @@ try
         P1          = A(:,:,jj)*P0*A(:,:,jj)'+B_tilde*B_tilde';
         P0          = P1-K*Omega*K';
         
-        % Likelihood
+        % likelihood
         LL = LL-0.5*(logdet(Omega)+Z_tilde'*Omega_inv*Z_tilde);
         
     end
@@ -87,5 +84,6 @@ catch
     disp('LL catch err.');
     LL = -9e200;
 end
+
 end
 

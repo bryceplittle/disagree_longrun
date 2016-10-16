@@ -24,8 +24,7 @@ function [params] = initial_params()
 % phi_s   = 0.001;                                % signal precision
 % sig_h   = 2.00;                                 % vol multiplier
 % pi      = 0.05;                                 % prob of low vol state
-% phi_ce  = 0.00;                                 % xvar scale
-
+% phi_ce  = 0.00;                                 % xvar scale (unused)
 %% Annual Data %%
 
 gamma   = 10;                                   % risk aversion
@@ -50,34 +49,10 @@ phi_rf  = 0.02;                                 % rf measurement error
 phi_s   = 2*phi_x;                        		% signal precision
 sig_h   = 2.00;                                 % vol multiplier
 pi      = 0.05;                                 % prob of low vol state
-phi_ce  = 0.00;                                 % xvar scale
+phi_ce  = 0.00;                                 % xvar scale (unused)
 
 
 params = [gamma,psi,beta,pc,pd,kap_1,kap_0,kap_1m,kap_0m,mu_c,mu_d,rho_x,rho_d,rho_cd,phi_x,phi_c,phi_d,phi_rm,phi_rf,phi_s,sig_h,pi,phi_ce]';
-
-% params(1)   = gamma;
-% params(2)   = psi;
-% params(3)   = beta;
-% params(4)   = pc;
-% params(5)   = pd;
-% params(6)   = kap_1;
-% params(7)   = kap_0;
-% params(8)   = kap_1m;
-% params(9)   = kap_0m;
-% params(10)  = mu_c;
-% params(11)  = mu_d;
-% params(12)  = rho_x;
-% params(13)  = rho_d;
-% params(14)  = rho_cd;
-% params(15)  = phi_x;
-% params(16)  = phi_c;
-% params(17)  = phi_d;
-% params(18)  = phi_rm;
-% params(19)  = phi_rf;
-% params(20)  = phi_s;
-% params(21)  = sig_h;
-% params(22)  = pi;
-% params(23)  = phi_ce;
 
 end
 

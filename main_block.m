@@ -2,16 +2,17 @@ clear, clc;
 mainpath = 'C:/Users/bryce/Dropbox/Research/macrofinance/dynhoe/code/main';
 addpath(mainpath); cd(mainpath); setup;
 
-jj1_max         = 25000;
-n_block         = 2;
-n_p             = size(params,1);
-block_draw      = zeros(n_p,1);
-prob_move       = 4/(tau*size(Y1,1));
-prop_scale 		= 1e-3;
-prop_cov        = diag(abs(params))*1e-5;
-prop_cov(10,10) = 0;
-prop_cov(11,11) = 0;
-prop_cov(23,23) = 0;
+jj1_max         = 25000;  							% size of MCMC sample
+n_block         = 2;  								% number of parameter blocks in sampling
+n_p             = size(params,1);  					% number of parameters
+block_draw      = zeros(n_p,1);  					% stores most recent vector in markov chain
+prob_move       = 4/(tau*size(Y1,1));  				% the probability of flipping a volatility state in a proposal
+prop_cov        = diag(abs(params))*1e-5;  			% scales proposal covariance matrix
+
+% sets certain parameters to constants
+prop_cov(10,10) = 0;  % AR(1) intercept
+prop_cov(11,11) = 0;  % AR(1) intercept
+prop_cov(23,23) = 0;  % unused parameter
 
 restart 		= 0;
 
@@ -62,7 +63,7 @@ for jj1 = 1:jj1_max
     
     count = count+1;
     
-    % randomly generate two blocks %
+    % randomly generate two blocks
     for pp = 1:n_p
         block_draw(pp) = rand;
     end
@@ -70,7 +71,7 @@ for jj1 = 1:jj1_max
     block{1} = params_order <= 11;
     block{2} = params_order >  11;
     
-    %% Blocks 1 and 2 %%
+    %%% sample parameter blocks 1 and 2 %%%%
     
     for bb = 1:n_block
         
@@ -87,7 +88,7 @@ for jj1 = 1:jj1_max
         
         if min(pcand>params_LB)==1 && min(pcand<params_UB)==1  && abs(log_prior(pcand))<inf
             
-            % Solve Model %
+            % attempt to solve model for parameter candidate
             
             [pcand,fail] = solve_steady(pcand);
             [A_cand,B_cand,D,P_cand,p_cand] = first_guess(params,n_hist,n_shk,n_Y,kbar);
@@ -105,7 +106,7 @@ for jj1 = 1:jj1_max
                 [Pi_cand] = solve_xvar_mex(A_cand,C1_cand,C2_cand,D,K_cand,n_hist,jlag);
             end
             
-            % End of Solve Model %
+			% stochastic acceptance/rejection of parameter candidate
             
             if fail == 0
                 pcand_prior = log_prior(pcand);
@@ -146,13 +147,13 @@ for jj1 = 1:jj1_max
             accept_count = accept_count + 1/2;
         end
         
-    end  % end of block 1-2 loop %
+    end
     
-    %% Block 3 %%
-    % generate candidate history %
+	%%% sample block 3, the history of volatility states %%%
     
     sT_cand = sT;
     
+	% sample new volatility history candidate
     for tt = 1:T+tau
         if log(rand) <= log(prob_move)
             if sT_cand(tt) == 1
@@ -180,6 +181,8 @@ for jj1 = 1:jj1_max
         end
     end
     
+	%%% print markov chain analytics, periodically save data %%%
+	
     if mod(count,100) == 0
         toc;
 		

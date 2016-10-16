@@ -42,7 +42,7 @@ end
 % not0    = sum(isnan(Y2) == 0,2);
 % not0    = not0.*(not0 > 1);
 
-%% Initialize Parameters %%
+%% initialize parameters and pre-allocate arrays %%
 
 [params]                = initial_params();
 [params_UB, params_LB]  = param_bounds();

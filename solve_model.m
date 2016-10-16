@@ -1,17 +1,11 @@
 function [A,B,C1,C2,D,g0_pc,g0_pd,g0_rf,gx_pc,gx_pd,gx_rf,Pi,params,fail] = solve_model(params,kbar,n_hist,jlag,jlead1,jlead0)
 
-% clear solve_AB_mex solve_condvcov_mex solve_intercepts_mex solve_xvar_mex;
-% clear mex;
-% warning('off','Coder:MATLAB:singularMatrix');
-
-% setup;
-
 n_shk       = 5;                                        % num aggregate shocks
 n_Y         = 5;                                        % num observables
 tol         = 1e-6;                                     % convergence criteria
 fail        = 0;                                        % model solution failure boolean
 
-%% Compute F.I.R.E. Steady State %%
+%%% compute F.I.R.E. steady state %%%
 
 try
     options = optimset('MaxIter',1e20,'MaxFunEvals',1e20,'TolFun',1e-6,'Display','off');
@@ -44,11 +38,11 @@ catch
     fail = 1;
 end
 
-%% Model Solution %%
+%%% model solution %%%
 
 try
     [A,B,D,P,p] = first_guess(params,n_hist,n_shk,n_Y,kbar); % FIRE soln
-    [A,B,C1,C2,K,gx_pc,gx_pd,gx_rf,fail] = solve_AB(params,A,B,D,P,p,kbar,n_shk,n_Y,n_hist,jlead1,jlead0,jlag,tol,fail);
+    [A,B,C1,C2,K,gx_pc,gx_pd,gx_rf,fail] = solve_AB(params,A,B,D,P,p,kbar,n_shk,n_Y,n_hist,jlead1,jlead0,jlag,tol,fail);  % limited information soln
 	% [A,B,C1,C2,K,gx_pc,gx_pd,gx_rf,fail] = solve_AB_mex(params,A,B,D,P,p,kbar,n_shk,n_Y,n_hist,jlead1,jlead0,jlag,tol,fail);
     
     if fail == 0

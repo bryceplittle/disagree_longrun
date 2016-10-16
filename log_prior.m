@@ -26,7 +26,7 @@ sig_h   = params(21);
 pi      = params(22);
 phi_ce  = params(23);
 
-%% Preferences %%
+%%% preferences %%%
 
 % gamma
 a = 1;
@@ -52,7 +52,7 @@ prior_pd = makedist('Uniform','lower',a,'upper',b);
 
 LP = LP + log(pdf(prior_pd, beta));
 
-%% Consumption Growth %%
+%%% consumption growth %%%
 
 % mu_c
 a = -0.06;
@@ -86,7 +86,7 @@ prior_pd = makedist('Uniform','lower',a,'upper',b);
 
 LP = LP + log(pdf(prior_pd, phi_x));
 
-%% Dividend Growth %%
+%%% dividend growth %%%
 
 % mu_d
 a = -0.06;
@@ -146,7 +146,7 @@ prior_pd = makedist('Uniform','lower',a,'upper',b);
 
 LP = LP + log(pdf(prior_pd, phi_rf));
 
-%% Volatility %%
+%%% volatility %%%
 
 % sig_h
 a = 0;
@@ -163,14 +163,6 @@ b = 1;
 prior_pd = makedist('Uniform','lower',a,'upper',b);
 
 LP = LP + log(pdf(prior_pd, pi));
-
-% phi_ce
-% a = 0;
-% b = 1;
-
-% prior_pd = makedist('Uniform','lower',a,'upper',b);
-
-% LP = LP + log(pdf(prior_pd, phi_ce));
 
 end
 

@@ -1,4 +1,5 @@
 function v=dec2binvec(d,dim)
+% credit: Kristoffer Nimark
 
 vv=dec2bin(d)=='1';
 
