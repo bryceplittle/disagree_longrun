@@ -1,5 +1,5 @@
 clear, clc;
-mainpath = 'C:/Users/bryce/Dropbox/Research/macrofinance/dynhoe/code/main';
+mainpath = 'C:/Users/...';  % define a path
 addpath(mainpath); cd(mainpath); setup;
 
 jj1_max         = 25000;  							% size of MCMC sample
